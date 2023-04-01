@@ -19,3 +19,9 @@ yarn-error.log*
 
 # Local Netlify folder
 .netlify
+
+# ignore .astro directory
+.astro
+
+# ignore Jampack cache files
+.jampack/
