@@ -12,5 +12,8 @@ might also bring some other stuff, with focus on what I do in my life.
 If you came here, I hope you find it interesting.
 
 ## On this blog
+
 This blog is built using [astro](https://astro.build/) with the [AstroPaper
-theme](https://github.com/satnaing/astro-paper).
+theme](https://github.com/satnaing/astro-paper). It is deployed using a basic
+[netlify](https://www.netlify.com/) config (basically, I clicked on the button available in [this
+page](https://www.netlify.com/blog/2021/07/08/build-wicked-fast-sites-with-astro-an-introduction/)).
