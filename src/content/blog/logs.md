@@ -1,10 +1,10 @@
 ---
 author: Baptiste Marlet
-pubDatetime: 2024-04-12T14:00:00Z
+pubDatetime: 2024-04-13T07:00:00Z
 title: On my love of logs — A love letter to monitoring
 postSlug: on-my-love-of-logs-a-love-letter-to-monitoring
 featured: true
-draft: true
+draft: false
 tags:
   - tech
   - monitoring
@@ -40,46 +40,46 @@ bugs.
 
 The first part I'll detail is how we can anticipate issues with monitoring. Whichever stack you have
 to monitor your application (tools like [Grafana](https://grafana.com/),
-[Sentry](https://sentry.io/welcome/), or all the other that exist), you will find yourself in a
+[Sentry](https://sentry.io/welcome/), or all the others that exist), you will find yourself in a
 position where, somewhere, you can see logs, errors, metrics and traces of your services.
 
-Examples of those might be API call traces, detailed with database call time, serialization time,
-logs with the status code, the request and response headers, the IP of the call, and all the other
-possible logs you can imagine. With those, you will have logs and metrics about recurring tasks,
-including how long they take to run, the number of time they are triggered, the number of objects
-they process, and so on.
+Examples of those might be API call traces, detailed with database call time, serialization time. To
+that you add logs with the status code, the request and response headers, the IP of the call, and
+all the other possible logs you can imagine. Additionally, you will have logs and metrics about
+recurring tasks, including how long they take to run, the number of time they are triggered, the
+number of objects they process, and so on.
 
 Basically, you have lots of data, and you put it somewhere to keep an eye on it. And you know your
 objectives. Maybe you have service level agreements (SLA) for your API response time, and you can
 compare the reality with your objectives. Or you know that you have that trigger itself every hour,
-and you need to know if its execution time goes higher than 45 minutes, so you have time to optimize
-it or change the way it works before it becomes too late.
+and you need to know if its execution time goes higher than 45 minutes. Thus, you have time to
+optimize it or change the way it works before it becomes too late.
 
-All those data will help you notice issues in production, but we want to anticipate those, and avoid
+All this data will help you notice issues in production, but we want to anticipate those, and avoid
 them if we can. To do so, you put the exact same monitoring stack for your testing and development
 environments. There, you can begin studying them, and detect trends.
 
-If you know a task needs 1 minutes to process 1 thousand objects, that the task length is more or
+If you know a task needs 1 minutes to process 1 thousand objects, that the task duration is more or
 less linear, and you have 15 thousand objects in production, you can estimate that the same task
 will need 15 minutes to run in production. Which might be acceptable, or not, depending on what the
 task does and when it is supposed to run.
 
 You can also notice that some processes slow the API calls due to locks being taken in the database
-or due to the computation that run in the database during those processes, and those tasks, while
+or due to the computation that run in the database during those processes. And those tasks, while
 lasting only a few seconds at worst in your testing environment, might last up to 2 or 3 minutes in
 production. And if you know that during the process, the API calls get slowed by 10%, you can
 anticipate it so that you continue reaching your SLA despite that.
 
 With all of those metrics, traces and logs, you can have a good idea of what the production
-conditions will be, and on what you will need to focus your efforts in the future.
+conditions will be. On what you will need to focus your efforts in the future.
 
 Obviously, having all that observability in your testing environments will also help you detect bugs
 you hadn't anticipated before they reach production, so that you can fix them before it is too late.
 
 ## Solving problems with monitoring
 
-Then come a time where the bug wasn't anticipated as expected. The bug happened, hopefully in a
-testing environment. This bugs gives me two strange logs. One leading to a traceback, the other not.
+Then comes a time where the bug wasn't anticipated as expected. The bug happened, hopefully in a
+testing environment. This bug gives me two strange logs. One leading to a traceback, the other not.
 But both of them lead to an unexpected situation. The easy case is the traceback. I know what was
 missing, which line triggered the error, how I can fix that. I can write a test to reproduce that,
 understand what failed, and fix it properly.
@@ -92,7 +92,7 @@ or a loop that wasn't triggered as it should have.
 So it failed, but I am not blind. I have logs. I can, hopefully, find what happened. Well, let's
 try to understand it.
 
-Let's assume we have the following logs, here presented in two formats: short, to help reading, and
+Let's assume we have the following logs, here presented in two formats: short, to help reading, then
 structured in JSON, which is closer to what I would find in a real situation.
 
 ```plaintext
@@ -110,23 +110,23 @@ structured in JSON, which is closer to what I would find in a real situation.
 ```
 
 I have my logs, and some details. Real logs could potentially be more detailed, but this will do for
-the example. Just a precision, what I called `correlation_id` here could have several names, the
-only objective is to have an idea that is similar for the whole process, so that we can have all the
+the example. Just a precision, what I called `correlation_id` here could have several names. The
+only objective is to have an ID that is similar for the whole process, so that we can have all the
 details about a specific process by searching it.
 
 With those logs, the first thing I usually do at this stage is to `grep` the code for the different
 messages. Here, the warning is especially interesting, so something like `rg "no process to launch"`
-would be telling of what happened. From there, I can get details about what triggers this situation.
-Maybe we only get here if the result of the previous computation is higher than 50. But we know that
-our result is 100.
+would be telling of what happened. From there, I can get details about what triggered this
+situation. Maybe we only get here if the result of the previous computation is higher than 50. But
+we know that our result was 100.
 
 This brings the next question: was this result expected? Or should we have had something else, like
 40, which would have triggered the next process? For the needs of this test, let's assume that was
 what should have happened.
 
-So I go to the computation, checks what should have happened. Depending on the computation that is
-being done, I can run it manually, or create a test with an object that have the same initial data.
-And I check, step by step, what happens. Until I find the stage with the wrong result. Maybe I
+So I go to the computation, and check what should have happened. Depending on the computation that
+is being done, I can run it manually, or create a test with an object that have the same initial
+data. And I check, step by step, what happens. Until I find the stage with the wrong result. Maybe I
 wanted to multiply a parameter by 100, and instead of `parameter * FACTOR` in the code, I wrote
 `FACTOR`. Which can seem a trivial error, but experience tells me those usually are the more common.
 
@@ -141,7 +141,7 @@ I won't detail it here. I will just write about what makes logs useful.
 
 Ideally, you want to be able to know where to search for a bug when you have a log. This means each
 log should give indications on what triggered it. If I take my previous example, the logs are bad:
-we have no idea which process started, in which scope we find ourselves. A better log could be
+we have no idea which process started, in which scope we find ourselves in. A better log could be
 something along the line of: `[APPLICATION][ALGORITHM NAME] process start`. Another could be
 `application.algorithm.process_start`. With those two, we have _context_, and know what was
 happening around potential warnings or errors.
@@ -156,7 +156,7 @@ log is `object found, object_id=42`, you can run `rg "object found"`, and find t
 searching for, easily.
 
 Finally, give as much indications as you might need later. In the previous example, we log the
-result of the computation, but we do not run any parameter. In production, you might not have a way
+result of the computation, but we do not know any parameter. In production, you might not have a way
 to access the object and its parameters. Log them. Get them in logs, so that you can create the same
 objects in unit tests to solve the bug in the future.
 
