@@ -1,10 +1,10 @@
 ---
 author: Baptiste Marlet
-pubDatetime: 2024-06-18T08:40:00Z
+pubDatetime: 2024-06-18T08:45:00Z
 title: A testing philosophy — on my use of unit tests
 postSlug: a-testing-philosophy-on-my-use-of-unit-tests
 featured: true
-draft: true
+draft: false
 tags:
   - tech
   - tests
