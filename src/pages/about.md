@@ -3,8 +3,8 @@ layout: ../layouts/AboutLayout.astro
 title: "About"
 ---
 
-My name is Baptiste Marlet, aka telmar, and I am a backend engineer, currently working at
-[Sahar](https://sahar.fr), and before that at [PayLead](https://www.paylead.fr/).
+My name is Baptiste Marlet, aka telmar, and I am a backend engineer, currently working at [Padam Mobility](https://www.padam-mobility.com/).
+Before that, I spent some time at [Sahar](https://sahar.fr), and at [PayLead](https://www.paylead.fr/).
 
 This blog is to put thoughts on both development and role playing games, probably my main passion. I
 might also bring some other stuff, with focus on what I do in my life.
