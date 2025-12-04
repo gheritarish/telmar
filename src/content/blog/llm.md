@@ -87,7 +87,7 @@ TWO_HUNDRED_FEET = 200
 class TestCanAttack:
     def setUp(self):
         self.longsword = WeaponFactory(type="longsword")
-        self.longsbow = WeaponFactory(type="longbow")
+        self.longbow = WeaponFactory(type="longbow")
 
     def test_can_attack_melee(self):
         # Compute condition and malus
@@ -107,7 +107,7 @@ class TestCanAttack:
 
     def test_can_attack_ranged(self):
         # Compute condition and malus
-        condition = can_attack(self.longsword, TEN_FEET)
+        condition = can_attack(self.longbow, TEN_FEET)
 
         # Verify
         assert condition is True
@@ -123,7 +123,7 @@ class TestCanAttack:
 
     def test_cannot_attack_ranged(self):
         # Compute condition and malus
-        condition = can_attack(self.longsword, 1000)
+        condition = can_attack(self.longbow, 1000)
 
         # Verify
         assert condition is False
